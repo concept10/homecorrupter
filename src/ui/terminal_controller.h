@@ -46,6 +46,11 @@ public:
     CView* verifyView(CView* view, const UIAttributes& attributes, 
                       const IUIDescription* description) override;
     
+    // IControlListener - required by IController
+    void valueChanged(CControl* pControl) override {}
+    void controlBeginEdit(CControl* pControl) override {}
+    void controlEndEdit(CControl* pControl) override {}
+    
     // ViewListenerAdapter
     void viewWillDelete(CView* view) override;
     

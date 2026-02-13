@@ -63,8 +63,10 @@ public:
     void setForegroundColor(const CColor& color);
     void setBackgroundColor(const CColor& color);
     
-    CLASS_METHODS(TerminalView, CView)
-
+    // Disable copy constructor and assignment (unique_ptr doesn't support copying)
+    TerminalView(const TerminalView&) = delete;
+    TerminalView& operator=(const TerminalView&) = delete;
+    
 private:
     // Terminal state
     struct TerminalState;

@@ -38,7 +38,7 @@ TerminalController::TerminalController()
 TerminalController::~TerminalController()
 {
     if (terminalView) {
-        terminalView->removeViewListener(this);
+        terminalView->unregisterViewListener(this);
         terminalView = nullptr;
     }
 }
@@ -50,13 +50,13 @@ CView* TerminalController::createView(const UIAttributes& attributes,
     const std::string* customViewName = attributes.getAttributeValue("custom-view-name");
     if (customViewName && *customViewName == "TerminalView") {
         // Create the terminal view
-        CRect size;
-        attributes.getPointAttribute("origin", size.left, size.top);
-        attributes.getPointAttribute("size", size.right, size.bottom);
-        size.right += size.left;
-        size.bottom += size.top;
+        CPoint origin, size;
+        attributes.getPointAttribute("origin", origin);
+        attributes.getPointAttribute("size", size);
         
-        terminalView = new TerminalView(size);
+        CRect rect(origin, size);
+        
+        terminalView = new TerminalView(rect);
         if (terminalView) {
             terminalView->registerViewListener(this);
             terminalView->startTerminal();
