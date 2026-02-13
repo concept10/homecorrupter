@@ -135,6 +135,11 @@
 
 <!-- AUTO-GENERATED CONTROLS END -->
 
+        <!-- Terminal View - integrated into monitor screen -->
+        <view class="CViewContainer" size="760, 380" origin="90, 75" 
+              background-color="#000000ff" mouse-enabled="true" transparent="false"
+              sub-controller="TerminalController" custom-view-name="TerminalView" />
+
         <view class="CView" size="55, 12" origin="595, 477" bitmap="version" />
     </template>
     <variables/>
