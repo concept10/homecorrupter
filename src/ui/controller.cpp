@@ -24,6 +24,7 @@
 #include "../plugin_process.h"
 #include "controller.h"
 #include "uimessagecontroller.h"
+#include "terminal_controller.h"
 #include "../paramids.h"
 
 #include "pluginterfaces/base/ibstream.h"
@@ -299,6 +300,10 @@ IController* PluginController::createSubController( UTF8StringPtr name,
         UIMessageController* controller = new UIMessageController( this );
         addUIMessageController( controller );
         return controller;
+    }
+    if ( UTF8StringView( name ) == "TerminalController" )
+    {
+        return new TerminalController();
     }
     return nullptr;
 }

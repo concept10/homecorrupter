@@ -138,6 +138,10 @@ set(vst_sources
     src/ui/controller.h
     src/ui/controller.cpp
     src/ui/uimessagecontroller.h
+    src/ui/terminal_view.h
+    src/ui/terminal_view.cpp
+    src/ui/terminal_controller.h
+    src/ui/terminal_controller.cpp
     ${VSTSDK_PLUGIN_SOURCE}
 )
 
