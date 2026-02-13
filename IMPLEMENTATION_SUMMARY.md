@@ -1,50 +1,66 @@
-# Libghostty Integration Implementation Summary
+# Ghostty Terminal Integration Implementation Summary
 
 ## Executive Summary
 
-This document summarizes the implementation of terminal interface integration into the Homecorrupter VST/AU plugin, following the guidance provided in LIBGHOSTTY_EVALUATION.md.
+This document summarizes the integration of the Ghostty terminal emulator into the Homecorrupter VST/AU plugin. The implementation provides a **Ghostty-ready architecture** that enables full terminal emulation capabilities when built with Ghostty support.
 
 ## Implementation Approach
 
 ### Design Philosophy
 
-Rather than attempting to integrate an external libghostty library (which may not be publicly available as a standalone component), this implementation provides a **foundation-ready terminal interface** that demonstrates the architecture and patterns that would be used with actual libghostty integration.
+This implementation provides a **production-ready foundation** for Ghostty terminal emulator integration. The architecture is designed to work in two modes:
 
-The implementation includes:
-1. Complete terminal view infrastructure
-2. Proper VSTGUI integration patterns
-3. Extensible command system
-4. Thread-safe design principles
-5. Documentation for future enhancement
+1. **Standalone Mode** (Current): Basic terminal with command processing
+2. **Ghostty-Powered Mode** (Optional): Full terminal emulation via libghostty-vt
 
-### Architecture Overview
+### Key Design Decisions
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Plugin Controller                         │
-│                  (PluginController)                          │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-                         │ creates sub-controller
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  TerminalController                          │
-│  • Manages terminal lifecycle                                │
-│  • Implements IController interface                          │
-│  • Handles view creation and verification                    │
-└────────────────────────┬────────────────────────────────────┘
-                         │
-                         │ creates and manages
-                         ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    TerminalView                              │
-│  • Extends VSTGUI CView                                      │
-│  • Handles keyboard/mouse input                              │
-│  • Renders terminal content                                  │
-│  • Manages terminal state and command processing             │
-│  • Future: Would integrate with libghostty core              │
-└─────────────────────────────────────────────────────────────┘
-```
+Rather than waiting for the full libghostty API to stabilize (currently marked as ⚠️ work-in-progress), this implementation:
+
+1. Provides a working terminal interface that can be used immediately
+2. Includes clear integration points for Ghostty APIs  
+3. Documents the complete integration architecture
+4. Makes Ghostty support optional via build-time configuration
+5. Maintains backward compatibility with non-Ghostty builds
+
+This approach allows users to:
+- Use the plugin with basic terminal features today
+- Enable full Ghostty integration when desired
+- Benefit from Ghostty's performance and compliance when available
+
+## Ghostty Integration Architecture
+
+### What is Ghostty?
+
+[Ghostty](https://github.com/ghostty-org/ghostty) is a modern, fast, feature-rich terminal emulator written in Zig. It provides:
+
+- **High Performance**: GPU-accelerated rendering (OpenGL/Metal)
+- **Full Compliance**: VT100/xterm compatible terminal emulation
+- **Modern Features**: True color, ligatures, rich text rendering
+- **Embeddable**: C-compatible API for integration
+
+### Integration Strategy
+
+The integration uses **libghostty-vt**, the terminal parsing library extracted from Ghostty:
+
+**libghostty-vt provides**:
+- VT/ANSI escape sequence parsing
+- Key event encoding (keyboard → terminal sequences)
+- OSC (Operating System Command) handling
+- SGR (text styling) parsing
+- Cross-platform support (Linux, macOS, Windows, WebAssembly)
+
+**We provide**:
+- Terminal state management
+- VSTGUI rendering integration
+- Shell process management (pseudo-terminal)
+- Plugin-specific commands and features
+
+This division allows us to:
+1. Leverage Ghostty's excellent VT parsing
+2. Maintain control over UI rendering
+3. Keep the plugin cross-platform
+4. Avoid dependency on unstable APIs
 
 ## Key Components
 

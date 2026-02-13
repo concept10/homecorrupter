@@ -3,6 +3,7 @@ vst3sdk
 Makefile
 CMakeCache.txt
 CMakeFiles
+external/
 
 .DS_Store
 Thumbs.db

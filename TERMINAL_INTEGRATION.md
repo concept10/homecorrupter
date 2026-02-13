@@ -2,7 +2,22 @@
 
 ## Overview
 
-The Homecorrupter plugin now includes an integrated terminal interface powered by libghostty integration concepts. The terminal appears directly in the monitor screen area of the plugin UI, replacing the static image with a fully interactive command-line interface.
+The Homecorrupter plugin includes an integrated terminal interface that appears directly in the monitor screen area of the plugin UI. The terminal is **designed with Ghostty terminal emulator integration in mind**, providing a foundation for full terminal emulation capabilities.
+
+### Current State
+- ✅ Basic terminal UI with command processing
+- ✅ Command history and keyboard navigation
+- ✅ Cursor blinking and visual feedback
+- ✅ Scrollback buffer (1000 lines)
+- ✅ Ghostty-ready architecture
+
+### Future Enhancement: Ghostty Integration
+- 🚧 Full VT100/ANSI terminal emulation (via libghostty-vt)
+- 🚧 Real shell process support (bash, zsh, etc.)
+- 🚧 Advanced styling (colors, bold, underline)
+- 🚧 Terminal sequence parsing
+
+For details on enabling full Ghostty support, see **[GHOSTTY_INTEGRATION.md](GHOSTTY_INTEGRATION.md)**.
 
 ## Features
 
@@ -85,13 +100,47 @@ Hello from Homecorrupter!
 
 ## Architecture
 
-### Libghostty Integration Concept
-While libghostty is designed as a standalone terminal emulation library, this implementation provides a foundation that could integrate with actual libghostty functionality. The current implementation includes:
+### Ghostty-Ready Design
+
+The terminal implementation follows a layered architecture designed for easy integration with the Ghostty terminal emulator. The current implementation includes:
 
 1. **Terminal State Management**: Maintains terminal state including prompt, history, and buffer
-2. **Input Processing**: Handles keyboard events and special keys
+2. **Input Processing**: Handles keyboard events and special keys  
 3. **Output Rendering**: Draws terminal content using VSTGUI drawing context
 4. **Command Processing**: Extensible command system for custom plugin commands
+5. **Integration Points**: Code marked for Ghostty API integration
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Plugin Controller                         │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  TerminalController                          │
+│  • Manages terminal lifecycle                                │
+│  • Implements IController interface                          │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    TerminalView                              │
+│  • Extends VSTGUI CView                                      │
+│  • Handles keyboard/mouse input                              │
+│  • Renders terminal content                                  │
+│  • Integration points for libghostty-vt                      │
+└─────────────────────────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│              (Future) Ghostty Integration                    │
+│  • libghostty-vt for VT sequence parsing                    │
+│  • Pseudo-terminal (pty) for shell processes                │
+│  • Full ANSI/VT100 terminal emulation                       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+For full details on Ghostty integration, see **[GHOSTTY_INTEGRATION.md](GHOSTTY_INTEGRATION.md)**.
 
 ### Future Enhancements
 With full libghostty integration, the terminal could support:

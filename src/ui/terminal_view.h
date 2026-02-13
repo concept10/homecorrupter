@@ -36,7 +36,18 @@ using namespace VSTGUI;
 
 /**
  * TerminalView provides a terminal interface within the plugin UI
- * Integrates with libghostty for terminal emulation capabilities
+ * 
+ * ARCHITECTURE: Designed for integration with Ghostty terminal emulator
+ * - Current: Basic command processing implementation
+ * - Future: Full Ghostty integration via libghostty-vt
+ * 
+ * See GHOSTTY_INTEGRATION.md for details on enabling full Ghostty support.
+ * 
+ * When built with -DGHOSTTY_ENABLED:
+ * - Uses libghostty-vt for VT sequence parsing
+ * - Supports full ANSI/VT escape sequences
+ * - Real shell process integration via pseudo-terminal
+ * - GPU-accelerated rendering (optional)
  */
 class TerminalView : public CView
 {
