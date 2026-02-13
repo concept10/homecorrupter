@@ -2,6 +2,10 @@
 
 Homecorrupter is a VST/AU plug-in which allows the reduction of sample rate, bit depth and playback speed of any incoming audio, on the fly.
 
+## New Feature: Integrated Terminal Interface
+
+The plugin now features a **real terminal interface** integrated directly into the monitor screen area, powered by libghostty concepts. This provides an interactive command-line interface for controlling the plugin, viewing information, and executing commands without leaving your DAW. See [TERMINAL_INTEGRATION.md](TERMINAL_INTEGRATION.md) for details.
+
 ## Build instructions
 
 The project uses [CMake](https://cmake.org) to generate the Makefiles and has been built and tested on macOS, Windows 10 and Linux (Ubuntu).
