@@ -210,6 +210,12 @@ int32_t TerminalView::onKeyUp(VstKeyCode& keyCode)
 
 void TerminalView::handleCharInput(char c)
 {
+    // GHOSTTY INTEGRATION POINT:
+    // When built with GHOSTTY_ENABLED, keyboard input would be encoded using
+    // libghostty-vt's key encoder (ghostty_key_encoder_encode) to produce proper
+    // terminal escape sequences, then sent to the shell process via pty.
+    // See GHOSTTY_INTEGRATION.md Section "Code Integration Points".
+    
     if (c == '\r' || c == '\n') {
         // Execute command
         std::string command = currentInput;
@@ -274,6 +280,12 @@ void TerminalView::processCommand(const std::string& command)
     // Echo command
     lines.push_back(state->prompt + command);
     
+    // GHOSTTY INTEGRATION POINT:
+    // When built with GHOSTTY_ENABLED, commands would be sent to a real shell process
+    // via pseudo-terminal (pty), and output would be parsed using libghostty-vt for
+    // proper VT sequence handling (colors, cursor movement, etc.)
+    // See GHOSTTY_INTEGRATION.md for implementation details.
+    
     // Process command
     if (command.empty()) {
         // Just add new prompt
@@ -301,7 +313,8 @@ void TerminalView::processCommand(const std::string& command)
     } else if (command == "info") {
         lines.push_back("Homecorrupter VST/AU Plugin");
         lines.push_back("Version 1.1.3");
-        lines.push_back("Terminal powered by libghostty integration");
+        lines.push_back("Terminal: Ghostty-ready architecture");
+        lines.push_back("See GHOSTTY_INTEGRATION.md for details");
         lines.push_back("(c) igorski.nl 2020-2024");
         lines.push_back("");
     } else if (command == "exit") {
@@ -391,6 +404,14 @@ void TerminalView::setBackgroundColor(const CColor& color)
 
 void TerminalView::processTerminalOutput()
 {
+    // GHOSTTY INTEGRATION POINT:
+    // When built with GHOSTTY_ENABLED, this method would:
+    // 1. Read output from shell process (pty)
+    // 2. Parse VT escape sequences using libghostty-vt
+    // 3. Update terminal state (colors, cursor position, etc.)
+    // 4. Trigger re-render with proper styling
+    // See GHOSTTY_INTEGRATION.md Section "VT Sequence Parsing".
+    
     // Process any buffered output
     // This would integrate with libghostty's output handling
     for (const auto& line : outputBuffer) {

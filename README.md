@@ -4,7 +4,22 @@ Homecorrupter is a VST/AU plug-in which allows the reduction of sample rate, bit
 
 ## New Feature: Integrated Terminal Interface
 
-The plugin now features a **real terminal interface** integrated directly into the monitor screen area, powered by libghostty concepts. This provides an interactive command-line interface for controlling the plugin, viewing information, and executing commands without leaving your DAW. See [TERMINAL_INTEGRATION.md](TERMINAL_INTEGRATION.md) for details.
+The plugin now features a **Ghostty-ready terminal interface** integrated directly into the monitor screen area. The terminal provides an interactive command-line interface for controlling the plugin, viewing information, and executing commands without leaving your DAW.
+
+### Current Implementation
+- Command-line interface with built-in commands
+- Command history and keyboard navigation
+- Classic green-on-black terminal aesthetic  
+- Integrated into the retro TV monitor display
+
+### Ghostty Integration (Optional)
+The terminal architecture is designed for integration with the [Ghostty terminal emulator](https://github.com/ghostty-org/ghostty), providing:
+- Full ANSI/VT100 terminal emulation
+- Real shell process support
+- Advanced terminal features (colors, styling, etc.)
+- See [GHOSTTY_INTEGRATION.md](GHOSTTY_INTEGRATION.md) for details
+
+For terminal documentation, see [TERMINAL_INTEGRATION.md](TERMINAL_INTEGRATION.md).
 
 ## Build instructions
 
