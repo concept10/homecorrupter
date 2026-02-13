@@ -51,6 +51,13 @@ elif [ "$type" == "au" ]; then
     FLAGS="-GXcode -DSMTG_CREATE_AU_VERSION=ON"
 fi
 
+# Check if Ghostty support should be enabled
+
+if [ -n "${USE_GHOSTTY}" ]; then
+    echo "Building with Ghostty terminal emulation support"
+    FLAGS="${FLAGS} -DUSE_GHOSTTY=ON"
+fi
+
 if [ -z "$identity" ]; then
     cmake "-DCMAKE_OSX_ARCHITECTURES=x86_64;arm64" -DVST3_SDK_ROOT=${DVST3_SDK_ROOT} ${FLAGS} ..
 else

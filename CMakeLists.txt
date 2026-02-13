@@ -31,6 +31,44 @@ add_compile_definitions(PLUGIN_MINOR_VERSION=${minor_version})
 add_compile_definitions(PLUGIN_RELEASE_NUMBER=${release_number})
 add_compile_definitions(PLUGIN_BUILD_NUMBER=${build_number})
 
+###################################
+# Optional Ghostty Integration    #
+###################################
+
+option(USE_GHOSTTY "Enable Ghostty terminal emulation support" OFF)
+
+if(USE_GHOSTTY)
+    message(STATUS "Ghostty integration enabled")
+    
+    # Add Ghostty include directory
+    set(GHOSTTY_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/external/ghostty")
+    if(EXISTS "${GHOSTTY_ROOT}/include")
+        include_directories("${GHOSTTY_ROOT}/include")
+        message(STATUS "Found Ghostty headers: ${GHOSTTY_ROOT}/include")
+    else()
+        message(WARNING "Ghostty headers not found at ${GHOSTTY_ROOT}/include")
+        message(WARNING "Please clone Ghostty: git clone https://github.com/ghostty-org/ghostty external/ghostty")
+    endif()
+    
+    # Find libghostty-vt library
+    find_library(GHOSTTY_VT_LIB
+        NAMES ghostty-vt libghostty-vt
+        PATHS "${GHOSTTY_ROOT}/zig-out/lib"
+        NO_DEFAULT_PATH
+    )
+    
+    if(GHOSTTY_VT_LIB)
+        message(STATUS "Found libghostty-vt: ${GHOSTTY_VT_LIB}")
+        add_compile_definitions(GHOSTTY_ENABLED=1)
+    else()
+        message(WARNING "libghostty-vt library not found")
+        message(WARNING "Build it first with: cd external/ghostty && zig build lib-vt -Doptimize=ReleaseSafe")
+        message(WARNING "Continuing without Ghostty support...")
+    endif()
+else()
+    message(STATUS "Ghostty integration disabled (use -DUSE_GHOSTTY=ON to enable)")
+endif()
+
 if(MSVC)
     add_definitions(/D _CRT_SECURE_NO_WARNINGS)
 endif()
@@ -179,6 +217,13 @@ foreach(lib IN ITEMS ${steinberg_libs})
         target_link_libraries(${target} PRIVATE ${VST3_SDK_ROOT}/build/lib/Release/${lib}.lib)
     endif()
 endforeach(lib)
+
+## Link Ghostty library if found
+
+if(USE_GHOSTTY AND GHOSTTY_VT_LIB)
+    target_link_libraries(${target} PRIVATE ${GHOSTTY_VT_LIB})
+    message(STATUS "Linked libghostty-vt to ${target}")
+endif()
 
 ## Include Steinberg VSTGUI
 
